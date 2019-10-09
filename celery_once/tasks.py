@@ -59,6 +59,10 @@ class QueueOnce(Task):
     def default_timeout(self):
         return self.once_config['settings'].get('default_timeout', 60 * 60)
 
+    @property
+    def default_key_prefix(self):
+        return self.once_config['settings'].get('key_prefix', 'qo')
+
     def unlock_before_run(self):
         return self.once.get('unlock_before_run', False)
 
@@ -126,7 +130,8 @@ class QueueOnce(Task):
         args = args or {}
         kwargs = kwargs or {}
         call_args = self._get_call_args(args, kwargs)
-        key = queue_once_key(self.name, call_args, restrict_to)
+        key = queue_once_key(self.name, call_args, restrict_to,
+                             self.default_key_prefix)
         return key
 
     def after_return(self, status, retval, task_id, args, kwargs, einfo):
