@@ -76,7 +76,7 @@ class QueueOnce(Task):
         if self.unlock_before_run():
             key = self.get_key(args, kwargs)
             self.once_backend.clear_lock(key)
-        return super(QueueOnce, self).__call__(*args, **kwargs)
+        return self.run(*args, **kwargs)
 
     def apply_async(self, args=None, kwargs=None, **options):
         """
