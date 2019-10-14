@@ -71,13 +71,12 @@ def get_redis(settings):
     global redis
     if not redis:
         try:
-            from redis import StrictRedis
+            from redis import Redis
         except ImportError:
             raise ImportError(
                 "You need to install the redis library in order to use Redis"
                 " backend (pip install redis)")
-        redis = StrictRedis(**parse_url(settings['url']))
-    return redis
+        return Redis.from_url(settings['url'])
 
 
 class Redis(object):
